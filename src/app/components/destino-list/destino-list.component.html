@@ -1,0 +1,41 @@
+<div class="container mt-5">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1 class="title">🌍 Destinos Disponibles</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-primary me-2" (click)="nuevoDestino()">➕ Nuevo Destino</button>
+      <button class="btn btn-info" (click)="irAReservas()">📅 Ver Reservas</button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="alert alert-info">Cargando destinos...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="!cargando && destinos.length === 0" class="alert alert-warning">
+    No hay destinos disponibles
+  </div>
+
+  <div class="row" *ngIf="!cargando && destinos.length > 0">
+    <div class="col-md-6 col-lg-4 mb-4" *ngFor="let destino of destinos">
+      <div class="card h-100 shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h5 class="card-title">{{ destino.nombre }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted"><strong>País:</strong> {{ destino.pais }}</p>
+          <p><strong>Descripción:</strong> {{ destino.descripcion }}</p>
+          <p><strong>Duración:</strong> {{ destino.dias }} días</p>
+          <p class="h5 text-success"><strong>Costo:</strong> ${{ destino.costo | number:'1.2-2' }}</p>
+          <span class="badge" [ngClass]="destino.disponible ? 'bg-success' : 'bg-danger'">
+            {{ destino.disponible ? '✓ Disponible' : '✗ No disponible' }}
+          </span>
+        </div>
+        <div class="card-footer bg-light">
+          <button class="btn btn-warning btn-sm me-2" (click)="editar(destino.id)">✏️ Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminar(destino.id)">🗑️ Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

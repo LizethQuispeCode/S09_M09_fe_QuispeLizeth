@@ -1,0 +1,101 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-info text-white">
+          <h3 class="mb-0">{{ titulo }}</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+            {{ error }}
+            <button type="button" class="btn-close" (click)="error = ''"></button>
+          </div>
+
+          <div *ngIf="cargando" class="text-center">
+            <div class="spinner-border text-info" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <form #destinoForm="ngForm" (ngSubmit)="guardar(destinoForm)" *ngIf="!cargando" novalidate>
+            <div class="mb-3">
+              <label for="nombre" class="form-label">Nombre del Destino</label>
+              <input type="text" class="form-control" id="nombre" name="nombre" required minlength="3"
+                [(ngModel)]="destino.nombre" #nombre="ngModel"
+                [class.is-invalid]="nombre.invalid && nombre.touched">
+              <div class="invalid-feedback" *ngIf="nombre.invalid && nombre.touched">
+                <span *ngIf="nombre.errors?.['required']">El nombre es requerido</span>
+                <span *ngIf="nombre.errors?.['minlength']">Mínimo 3 caracteres</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="pais" class="form-label">País</label>
+              <input type="text" class="form-control" id="pais" name="pais" required minlength="2"
+                [(ngModel)]="destino.pais" #pais="ngModel"
+                [class.is-invalid]="pais.invalid && pais.touched">
+              <div class="invalid-feedback" *ngIf="pais.invalid && pais.touched">
+                <span *ngIf="pais.errors?.['required']">El país es requerido</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="descripcion" class="form-label">Descripción</label>
+              <textarea class="form-control" id="descripcion" rows="4" name="descripcion" required minlength="10"
+                [(ngModel)]="destino.descripcion" #descripcion="ngModel"
+                [class.is-invalid]="descripcion.invalid && descripcion.touched"></textarea>
+              <div class="invalid-feedback" *ngIf="descripcion.invalid && descripcion.touched">
+                <span *ngIf="descripcion.errors?.['required']">La descripción es requerida</span>
+                <span *ngIf="descripcion.errors?.['minlength']">Mínimo 10 caracteres</span>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="costo" class="form-label">Costo ($)</label>
+                  <input type="number" class="form-control" id="costo" name="costo" required min="0"
+                    [(ngModel)]="destino.costo" #costo="ngModel"
+                    [class.is-invalid]="costo.invalid && costo.touched">
+                  <div class="invalid-feedback" *ngIf="costo.invalid && costo.touched">
+                    <span *ngIf="costo.errors?.['required']">El costo es requerido</span>
+                    <span *ngIf="costo.errors?.['min']">Debe ser mayor a 0</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="dias" class="form-label">Días</label>
+                  <input type="number" class="form-control" id="dias" name="dias" required min="1"
+                    [(ngModel)]="destino.dias" #dias="ngModel"
+                    [class.is-invalid]="dias.invalid && dias.touched">
+                  <div class="invalid-feedback" *ngIf="dias.invalid && dias.touched">
+                    <span *ngIf="dias.errors?.['required']">Días requerido</span>
+                    <span *ngIf="dias.errors?.['min']">Mínimo 1 día</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="imagen" class="form-label">URL de la Imagen</label>
+              <input type="text" class="form-control" id="imagen" name="imagen" [(ngModel)]="destino.imagen">
+            </div>
+
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="disponible" name="disponible" [(ngModel)]="destino.disponible">
+              <label class="form-check-label" for="disponible">
+                Disponible
+              </label>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+              <button type="submit" class="btn btn-success" [disabled]="destinoForm.invalid">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

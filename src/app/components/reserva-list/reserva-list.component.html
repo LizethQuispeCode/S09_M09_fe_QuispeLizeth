@@ -1,0 +1,54 @@
+<div class="container mt-5">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1 class="title">📅 Mis Reservas</h1>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn btn-success me-2" (click)="nuevaReserva()">➕ Nueva Reserva</button>
+      <button class="btn btn-info" (click)="irADestinos()">🌍 Ver Destinos</button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="alert alert-info">Cargando reservas...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="!cargando && reservas.length === 0" class="alert alert-warning">
+    No hay reservas registradas. ¡Crea una nueva!
+  </div>
+
+  <div class="table-responsive" *ngIf="!cargando && reservas.length > 0">
+    <table class="table table-hover table-striped">
+      <thead class="table-info">
+        <tr>
+          <th>Cliente</th>
+          <th>Email</th>
+          <th>Destino</th>
+          <th>Fecha Salida</th>
+          <th>Personas</th>
+          <th>Monto</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservas">
+          <td><strong>{{ reserva.nombreCliente }}</strong></td>
+          <td>{{ reserva.email }}</td>
+          <td>{{ obtenerNombreDestino(reserva.destinoId) }}</td>
+          <td>{{ reserva.fechaSalida | date:'dd/MM/yyyy' }}</td>
+          <td class="text-center">{{ reserva.cantidadPersonas }}</td>
+          <td class="text-success"><strong>${{ reserva.montoPago | number:'1.2-2' }}</strong></td>
+          <td>
+            <span class="badge" [ngClass]="reserva.estado === 'Confirmada' ? 'bg-success' : 'bg-warning'">
+              {{ reserva.estado }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-warning btn-sm me-2" (click)="editar(reserva.id)">✏️</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminar(reserva.id)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

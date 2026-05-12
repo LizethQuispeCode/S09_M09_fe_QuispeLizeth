@@ -1,0 +1,139 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0">{{ titulo }}</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="error" class="alert alert-danger alert-dismissible fade show">
+            {{ error }}
+            <button type="button" class="btn-close" (click)="error = ''"></button>
+          </div>
+
+          <div *ngIf="cargando" class="text-center">
+            <div class="spinner-border text-success" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <form #reservaForm="ngForm" (ngSubmit)="guardar(reservaForm)" *ngIf="!cargando" novalidate>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="nombreCliente" class="form-label">Nombre</label>
+                  <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" required minlength="3"
+                    [(ngModel)]="reserva.nombreCliente" #nombreCliente="ngModel"
+                    [class.is-invalid]="nombreCliente.invalid && nombreCliente.touched">
+                  <div class="invalid-feedback" *ngIf="nombreCliente.invalid && nombreCliente.touched">
+                    Nombre requerido (mínimo 3 caracteres)
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" required
+                    [(ngModel)]="reserva.email" #email="ngModel"
+                    [class.is-invalid]="email.invalid && email.touched">
+                  <div class="invalid-feedback" *ngIf="email.invalid && email.touched">
+                    Email inválido
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="telefonoContacto" class="form-label">Teléfono</label>
+                  <input type="tel" class="form-control" id="telefonoContacto" name="telefonoContacto" required
+                    [(ngModel)]="reserva.telefonoContacto" #telefonoContacto="ngModel"
+                    [class.is-invalid]="telefonoContacto.invalid && telefonoContacto.touched">
+                  <div class="invalid-feedback" *ngIf="telefonoContacto.invalid && telefonoContacto.touched">
+                    Teléfono requerido
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="destinoId" class="form-label">Destino</label>
+                  <select class="form-control" id="destinoId" name="destinoId" required
+                    [(ngModel)]="reserva.destinoId" #destinoId="ngModel"
+                    [class.is-invalid]="destinoId.invalid && destinoId.touched">
+                    <option [ngValue]="0">-- Selecciona un destino --</option>
+                    <option *ngFor="let destino of destinos" [ngValue]="destino.id">
+                      {{ destino.nombre }} ({{ destino.pais }})
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="destinoId.invalid && destinoId.touched">
+                    Destino requerido
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label for="fechaSalida" class="form-label">Fecha de Salida</label>
+                  <input type="date" class="form-control" id="fechaSalida" name="fechaSalida" required
+                    [(ngModel)]="reserva.fechaSalida" #fechaSalida="ngModel"
+                    [class.is-invalid]="fechaSalida.invalid && fechaSalida.touched">
+                  <div class="invalid-feedback" *ngIf="fechaSalida.invalid && fechaSalida.touched">
+                    Fecha requerida
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label for="cantidadPersonas" class="form-label">Cantidad de Personas</label>
+                  <input type="number" class="form-control" id="cantidadPersonas" name="cantidadPersonas" required min="1"
+                    [(ngModel)]="reserva.cantidadPersonas" #cantidadPersonas="ngModel"
+                    [class.is-invalid]="cantidadPersonas.invalid && cantidadPersonas.touched">
+                  <div class="invalid-feedback" *ngIf="cantidadPersonas.invalid && cantidadPersonas.touched">
+                    Mínimo 1 persona
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label for="montoPago" class="form-label">Monto ($)</label>
+                  <input type="number" class="form-control" id="montoPago" name="montoPago" required min="0"
+                    [(ngModel)]="reserva.montoPago" #montoPago="ngModel"
+                    [class.is-invalid]="montoPago.invalid && montoPago.touched">
+                  <div class="invalid-feedback" *ngIf="montoPago.invalid && montoPago.touched">
+                    Monto inválido
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="estado" class="form-label">Estado</label>
+                  <select class="form-control" id="estado" name="estado" [(ngModel)]="reserva.estado">
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Confirmada">Confirmada</option>
+                        <option value="Cancelada">Cancelada</option>
+                      </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="comentarios" class="form-label">Comentarios</label>
+              <textarea class="form-control" id="comentarios" name="comentarios" rows="3" [(ngModel)]="reserva.comentarios"></textarea>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+              <button type="button" class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+              <button type="submit" class="btn btn-success" [disabled]="reservaForm.invalid">Guardar Reserva</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
