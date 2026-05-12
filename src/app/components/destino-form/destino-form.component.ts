@@ -14,7 +14,6 @@ import { DestinoService, Destino } from '../../services/destino.service';
 })
 export class DestinoFormComponent implements OnInit {
   destino: Destino = {
-    id: 0,
     nombre: '',
     pais: '',
     descripcion: '',
